@@ -46,13 +46,19 @@ int main() {
 			cpBuf[len - 1] = 0;
 		if (strcmp(cpBuf, cpPassword)){
 			printf(
-			 "nope, dude, your password is '%s', mine is '%s'.\n"
-			 "I will generate new one\n",
+			 "Nope, dude, your password is '%s', mine is '%s'.\n"
+			 "I will generate new one.\n",
 			 cpBuf, cpPassword
 			);
 			continue;
 		}
-		printf("Yeeeeeeh! you did it. Come in\n");
+		printf(
+			"\n"
+			"+-------------------------------+\n"
+			"| Yeeeeeeh! you did it. Come in |\n"
+			"+-------------------------------+\n"
+			"\n"
+		);
 		break;
 	}
 
