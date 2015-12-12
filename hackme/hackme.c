@@ -4,11 +4,16 @@
 #include <time.h>
 
 
-
+/*
+	Seeds PRNG with some data
+*/
 void InitRnd(){
 	srand((getpid() << 16) + time(0));
 }
 
+/*
+	Generates password with rand()
+*/
 void GenPass(char * cpPassword, int len){
 	int i;
 	for(i=0; i<len - 1; i++) cpPassword[i] = 33 + (rand()%95);
@@ -17,34 +22,53 @@ void GenPass(char * cpPassword, int len){
 
 int main() {
 	int i, iYear, len;
-	char cpBuf[20], cpPassword[]="1234567890", cpYear[]="1900";
+	char cpBuf[20];
+	char cpPassword[]="1234567890", cpYear[]="1900";
 
- 	InitRnd();
+ 	InitRnd();   /* Init PRNG */
 
-	for(i=0; i < 3; i++){
-		GenPass(cpPassword, sizeof(cpPassword));
+	for(i=0; i < 3; i++){   /* Give 'im 3 attemps */
+		/* generate new password for each */
+		GenPass(cpPassword, sizeof(cpPassword)); 
+
+		/* get year of birth */
 		printf(
 			"\n"
 			"+-----------------------+\n"
 			"| Warning: adults only! |\n"
 			"+-----------------------+\n"
 			"\n"
-			"Enter you birth year: "
+			"Enter your birth year: "
 		);
 		if(!fgets(cpBuf, sizeof(cpBuf), stdin)) continue;
 		if(!(iYear = atoi(cpBuf))) continue;
+
+		/* add 1900 for 2-digit years */
 		if(iYear < 1000) iYear += 1900;
+
+		/* check he is not scholar */
 		if(iYear >= 2000) {
 			printf("You are a scholar, don't try to fool me\n", iYear);
 			return iYear;
 		}
+
+		/* convert year to string */
 		sprintf(cpYear, "%d", iYear);
+
+		/* ask for password */
 		printf("OK, dude, born in %s, enter the password: \n", cpYear);
+
+		/* zero cpBuf and read new password to it */
 		memset(cpBuf, 0, sizeof(cpBuf));
 		if(!fgets(cpBuf, sizeof(cpBuf), stdin)) continue;
+
+		/* remove trailing \n */
 		if((len = strlen(cpBuf))>0 && cpBuf[len - 1] == '\n')
 			cpBuf[len - 1] = 0;
+
+		/* compare passwords */
 		if (strcmp(cpBuf, cpPassword)){
+			/* wrong password */
 			printf(
 			 "Nope, dude, your password is '%s', mine is '%s'.\n"
 			 "I will generate new one.\n",
@@ -52,6 +76,8 @@ int main() {
 			);
 			continue;
 		}
+
+		/* password was OK */
 		printf(
 			"\n"
 			"+-------------------------------+\n"
@@ -63,10 +89,12 @@ int main() {
 	}
 
 	if(i == 3) {
+		/* loooo0o00o0ser, he had 3 failed attempts */
 		printf("Game over, baby. Bye-bye\n");
 		return i;
 	}
 
+	/* he wins */
 	system("cmd /K pause");
 	return 0;
 }
