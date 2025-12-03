@@ -69,14 +69,16 @@ EXPORTS
 Динамическая линковка основного приложения происходит в момент запуска программы, однако можно инциировать загрузку произвольной динамической библиотеки в любой момент времени. В Windows для этого используются функции LodalLibrary / GetProcAddress. Например
 
 
-MODULE hDll;
-double (*myfunc)(double);
-double (*myfunc2)(double);
+#include <windows.h>
+...
+    MODULE hDll;
+    double (*myfunc)(double);
+    double (*myfunc2)(double);
 
-hDll = LoadLibrary("mylib.dll")
+    hDll = LoadLibrary("mylib.dll")
 /* ToDo: проверить hDll не NULL */
-myfunc = GetProcAddress(hDll, "myfunc");
-myfunc2 = GetProcAddress(hDll, "myfunc2");
+    myfunc = GetProcAddress(hDll, "myfunc");
+    myfunc2 = GetProcAddress(hDll, "myfunc2");
 /* ToDo: проверить myfunc/myfunc2 не NULL */
 /* теперь можем использовать функции myfunc/myfunc2 - например передать их в функцию численного интегрирования */
 
